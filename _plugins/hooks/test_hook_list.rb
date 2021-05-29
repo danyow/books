@@ -20,34 +20,73 @@ module Jekyll
     new_docs = Array.new
     docs.each do |doc|
       data = doc.data
-      new_docs << doc
-      new_docs << doc
-      new_docs << doc
+      # new_docs << doc
+      # new_docs << doc
+      # new_docs << doc
+
       all = 0
       books = data['books']
       unless books.empty?
         books.each do |book|
-          tags = Utils.pluralized_array_from_hash(book, 'tag', 'tags')
-          unless tags.empty?
-            data['tags'] = data['tags'] | tags
-            puts data['tags']
-          end
           categories = Utils.pluralized_array_from_hash(book, 'category', 'categories')
-          unless categories.empty?
-            data['categories'] = data['categories'] | categories
-            puts data['categories']
+          tags = Utils.pluralized_array_from_hash(book, 'tag', 'tags')
+          moneys = Utils.pluralized_array_from_hash(book, 'money', 'moneys')
+          names = Utils.pluralized_array_from_hash(book, 'name', 'names')
+
+          cnt = moneys.size <=> names.size
+
+          # 大于等于
+          if (moneys.size <=> names.size) >= 0
+            (0..moneys.size - 1).each do |i|
+              money = moneys[i]
+              name = 'nil'
+              name = names[i] if i <= names.size - 1
+              new_doc = Document.new(doc.path, :site => site, :collection => posts)
+              new_doc.content = doc.content
+              # new_doc.excerpt_separator = doc.excerpt_separator
+              new_doc.data.replace(doc.data)
+              if (categories.size == 1) && (tags == 1)
+                # doc = Document.new(full_path, :site => site, :collection => self)
+                new_doc.data['book'] = {
+                  'name' => name,
+                  'money' => money,
+                  'tags' => tags[0],
+                  'categories' => categories[0]
+                }
+                new_doc.data['tags'] = tags
+                new_doc.data['categories'] = categories
+                new_docs << new_doc
+              elsif categories.size == tags.size && tags.size == moneys.size
+                new_doc.data['book'] = {
+                  'name' => name,
+                  'money' => money,
+                  'tags' => tags[i],
+                  'categories' => categories[i]
+                }
+                new_doc.data['tags'] = [tags[i]]
+                new_doc.data['categories'] = [categories[i]]
+                new_docs << new_doc
+              end
+            end
           end
-          book['moneys'] = Utils.pluralized_array_from_hash(book, 'money', 'moneys')
-          book['names'] = Utils.pluralized_array_from_hash(book, 'name', 'names')
-          book['moneys'].each do |money|
-            all += money.to_i
-          end
-          puts book
+
+          # unless tags.empty?
+          #   data['tags'] = data['tags'] | tags
+          #   puts data['tags']
+          # end
+          # unless categories.empty?
+          #   data['categories'] = data['categories'] | categories
+          #   puts data['categories']
+          # end
+          # book['moneys'].each do |money|
+          #   all += money.to_i
+          # end
+          # puts book
         end
       end
-      data['all'] = all
-      data['title'] = all
-      puts data
+      # data['all'] = all
+      # data['title'] = all
+      # puts data
     end
     posts.docs = new_docs
   end
