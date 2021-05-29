@@ -1,0 +1,18 @@
+---
+layout: post
+title:  "Welcome to Jekyll!"
+date:   2021-05-28 15:10:56 +0900
+books:
+  - time: 2021-05-28 15:10:56 +0900
+    categories: foods games
+    tags: morning video
+    names: apple yellow
+    moneys: 30 40
+  - time: 2021-05-28 23:59:59 +0900
+    categories: life
+    tags: water
+    names: white_coffee black_coffee
+    moneys: 123 333
+---
+
+`THE_PAGE_CONTENT`

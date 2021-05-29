@@ -1,0 +1,43 @@
+---
+layout: default
+---
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <header class="post-header">
+        {% if page.external-url %}
+            <h1 class="post-title" itemprop="name headline"><a href="{{ page.external-url }}">{{ page.title | escape }} &rarr;</a></h1>
+        {% else %}
+            <h1 class="post-title" itemprop="name headline">{{ page.title | escape }}</h1>
+        {% endif %}
+        <p class="post-meta">{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}{% if page.categories != empty or page.tags != empty %}{% include category_links.liquid categories=page.categories tags=page.tags date=page.date %}{% endif %}</p>
+    </header>
+
+    {% if page.all %}
+        <p> {{ page.all }} </p>
+    {% endif %}
+
+    {% if page.books %}
+        <p> 有book </p>
+        {% for book in page.books %}
+            {% for name in book.names %}
+                <ul> {{ name }} </ul>
+            {% endfor %}
+            {% for money in book.moneys %}
+                <ul> {{ money }} </ul>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p>无book </p>
+    {% endif %}
+
+    <div class="post-content" itemprop="articleBody">
+        {{ content }}
+    </div>
+
+    {% if site.comments == true and page.comments != false %}
+        <div class="post-comments" itemprop="comment">
+            {% include custom_comments_provider.html %}
+        </div>
+    {% endif %}
+
+</article>

@@ -1,3 +1,22 @@
+zh:
+  date:
+    format: "%Y/%m/%d" # See http://ruby-doc.org/core/Time.html#method-i-strftime for possible date formatting strings
+    abbr_day_names: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
+    abbr_month_names: ["一月", "二月", "三月", "四月", "五月", "六月",
+                       "七月", "八月", "九月", "十月", "十一月", "十二月"]
+    day_names: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"]
+    month_names: ["一月", "二月", "三月", "四月", "五月", "六月",
+                  "七月", "八月", "九月", "十月", "十一月", "十二月"]
+  morelink: "阅读"
+  page-older: "先前"
+  page-newer: "如今"
+  archive: "档"
+  archive-category: "自分类 '%1'"
+  archive-tag: "自标签 '%1'"
+  archive-year: "自年 '%1'"
+  archive-month: "自月 '%1'"
+  archive-day: "自日 '%1'"
+  comments: "评论"
 en:
   date:
     format: "%b %-d, %Y" # See http://ruby-doc.org/core/Time.html#method-i-strftime for possible date formatting strings

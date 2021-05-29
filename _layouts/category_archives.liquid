@@ -1,0 +1,60 @@
+---
+layout: default
+---
+<div class="home">
+
+    {% for post in page.posts %}
+    {% assign temp = all | plus: post.title | abs %}
+    {% capture all %} {{ all | replace: all, temp }}{% endcapture %}
+    {% endfor %}
+
+    {% capture i18n-tag %}archive-{{ page.type }}{% endcapture %}
+    {% capture default-title %}Archive of {{ page.type }} '%1' {% endcapture %}
+    {% capture title %}{% include i18n.html value=i18n-tag default=default-title %}{% endcapture %}
+
+    {% if page.type == 'year' %}
+    {% assign year = page.date | date: "%Y" %}
+    <h1 class="page-heading">{{ title | replace: "%1", year | escape }} {{ all }} </h1>
+    {% endif %}
+    {% if page.type == 'month' %}
+    {% assign month = page.date | date: "%Y/%m" %}
+    <h1 class="page-heading">{{ title | replace: "%1", month | escape }} {{ all }} </h1>
+    {% endif %}
+    {% if page.type == 'day' %}
+    {% assign day = page.date | date: "%Y/%m/%d" %}
+    <h1 class="page-heading">{{ title | replace: "%1", day | escape }} {{ all }} </h1>
+    {% endif %}
+    {% if page.type == 'tag' or page.type == 'category' %}
+    <h1 class="page-heading">{{ title | replace: "%1", page.title | escape }} {{ all }} </h1>
+    {% endif %}
+
+    {% capture site_lang %}{{ site.lang | default: "en" }}{% endcapture %}
+
+    <ul class="post-archives">
+        {% for post in page.posts %}
+        {% capture post_lang %}{{ post.lang | default: site_lang }}{% endcapture %}
+        {% capture lang %}{% if post_lang != site_lang %}{{ post_lang }}{% endif %}{% endcapture %}
+
+        <li>
+        <span class="post-meta">
+            {% if post.categories != empty or post.tags != empty %}
+                {% include category_links.liquid categories=post.categories tags=post.tags date=post.date %}
+            {% endif %}
+            {% if post.external-url %}
+                • <a href="{{ post.url | relative_url }}">Permalink</a>
+            {% endif %}
+        </span>
+
+            <h2>
+                {% if post.external-url %}
+                <a class="post-link" href="{{ post.external-url }}">{{ post.title | escape }} &rarr;</a>
+                {% else %}
+                <a class="post-link"
+                   href="{{ post.url | relative_url }}"{% if lang != empty %} lang="{{ lang }}"{% endif %}>{{ post.title | escape }}</a>
+                {% endif %}
+            </h2>
+        </li>
+        {% endfor %}
+    </ul>
+
+</div>
