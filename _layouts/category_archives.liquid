@@ -3,29 +3,24 @@ layout: default
 ---
 <div class="home">
 
-    {% for post in page.posts %}
-    {% assign temp = all | plus: post.title | abs %}
-    {% capture all %} {{ all | replace: all, temp }}{% endcapture %}
-    {% endfor %}
-
     {% capture i18n-tag %}archive-{{ page.type }}{% endcapture %}
     {% capture default-title %}Archive of {{ page.type }} '%1' {% endcapture %}
     {% capture title %}{% include i18n.html value=i18n-tag default=default-title %}{% endcapture %}
 
     {% if page.type == 'year' %}
     {% assign year = page.date | date: "%Y" %}
-    <h1 class="page-heading">{{ title | replace: "%1", year | escape }} {{ all }} </h1>
+    <h1 class="page-heading">{{ title | replace: "%1", year | escape }} {{ site.data.money.year.[year] }} </h1>
     {% endif %}
     {% if page.type == 'month' %}
     {% assign month = page.date | date: "%Y/%m" %}
-    <h1 class="page-heading">{{ title | replace: "%1", month | escape }} {{ all }} </h1>
+    <h1 class="page-heading">{{ title | replace: "%1", month | escape }} {{ site.data.money.month.[month] }} </h1>
     {% endif %}
     {% if page.type == 'day' %}
     {% assign day = page.date | date: "%Y/%m/%d" %}
-    <h1 class="page-heading">{{ title | replace: "%1", day | escape }} {{ all }} </h1>
+    <h1 class="page-heading">{{ title | replace: "%1", day | escape }} {{ site.data.money.day.[day] }} </h1>
     {% endif %}
     {% if page.type == 'tag' or page.type == 'category' %}
-    <h1 class="page-heading">{{ title | replace: "%1", page.title | escape }} {{ all }} </h1>
+    <h1 class="page-heading">{{ title | replace: "%1", page.title | escape }} {{ site.data.money.[page.type].[page.title] }} </h1>
     {% endif %}
 
     {% capture site_lang %}{{ site.lang | default: "en" }}{% endcapture %}

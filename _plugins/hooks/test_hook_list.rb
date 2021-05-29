@@ -18,9 +18,14 @@ module Jekyll
     posts = collections['posts']
     docs = posts.docs
     new_docs = []
+    all = 0
+    year_all = {}
+    month_all = {}
+    day_all = {}
+    tag_all = {}
+    category_all = {}
     docs.each do |doc|
       data = doc.data
-      all = 0
       books = data['books']
       unless books.empty?
         books.each do |book|
@@ -28,6 +33,29 @@ module Jekyll
           tags = Utils.pluralized_array_from_hash(book, 'tag', 'tags')
           moneys = Utils.pluralized_array_from_hash(book, 'money', 'moneys')
           names = Utils.pluralized_array_from_hash(book, 'name', 'names')
+          # Utils.parse_date(
+          #   data["date"].to_s,
+          #   "Document '#{relative_path}' does not have a valid date in the #{source}."
+          # )
+          #day
+          day = book['time'].strftime('%Y/%m/%d')
+          month = book['time'].strftime('%Y/%m')
+          year = book['time'].strftime('%Y')
+          if !day_all.include?(day)
+            day_all[day] = 0
+          end
+          if !month_all.include?(month)
+            month_all[month] = 0
+          end
+          if !year_all.include?(year)
+            year_all[year] = 0
+          end
+          moneys.each do |money|
+            day_all[day] += money.to_i
+            month_all[month] += money.to_i
+            year_all[year] += money.to_i
+            all += money.to_i
+          end
 
           # 大于等于
           if (moneys.size <=> names.size) >= 0
@@ -45,37 +73,39 @@ module Jekyll
                 #
                 tag_i = i
                 tag_i = 0 if (categories.size == 1) && (tags.size == 1)
+                tag = tags[tag_i]
+                category = categories[tag_i]
+                if !tag_all.include?(tag)
+                  tag_all[tag] = 0
+                end
+                if !category_all.include?(category)
+                  category_all[category] = 0
+                end
+                tag_all[tag] += money.to_i
+                category_all[category] += money.to_i
                 new_doc.data['book'] = {
                   'name' => name,
                   'money' => money,
-                  'tags' => tags[tag_i],
-                  'categories' => categories[tag_i]
+                  'tags' => tag,
+                  'categories' => category
                 }
-                new_doc.data['tags'] = [tags[tag_i]]
-                new_doc.data['categories'] = [categories[tag_i]]
+                new_doc.data['tags'] = [tag]
+                new_doc.data['categories'] = [category]
                 new_docs << new_doc
               end
             end
           end
-
-          # unless tags.empty?
-          #   data['tags'] = data['tags'] | tags
-          #   puts data['tags']
-          # end
-          # unless categories.empty?
-          #   data['categories'] = data['categories'] | categories
-          #   puts data['categories']
-          # end
-          # book['moneys'].each do |money|
-          #   all += money.to_i
-          # end
-          # puts book
         end
       end
-      # data['all'] = all
-      # data['title'] = all
-      # puts data
     end
+    site.data['money'] = {
+      'year' => year_all,
+      'month' => month_all,
+      'day' => day_all,
+      'tag' => tag_all,
+      'category' => category_all,
+      'all' => all,
+    }
     posts.docs = new_docs
   end
   Jekyll::Hooks.register :site, :pre_render do |data|
