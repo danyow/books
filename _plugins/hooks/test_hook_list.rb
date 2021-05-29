@@ -17,13 +17,9 @@ module Jekyll
     collections = site.collections
     posts = collections['posts']
     docs = posts.docs
-    new_docs = Array.new
+    new_docs = []
     docs.each do |doc|
       data = doc.data
-      # new_docs << doc
-      # new_docs << doc
-      # new_docs << doc
-
       all = 0
       books = data['books']
       unless books.empty?
@@ -33,38 +29,30 @@ module Jekyll
           moneys = Utils.pluralized_array_from_hash(book, 'money', 'moneys')
           names = Utils.pluralized_array_from_hash(book, 'name', 'names')
 
-          cnt = moneys.size <=> names.size
-
           # 大于等于
           if (moneys.size <=> names.size) >= 0
             (0..moneys.size - 1).each do |i|
-              money = moneys[i]
-              name = 'nil'
-              name = names[i] if i <= names.size - 1
-              new_doc = Document.new(doc.path, :site => site, :collection => posts)
-              new_doc.content = doc.content
-              # new_doc.excerpt_separator = doc.excerpt_separator
-              new_doc.data.replace(doc.data)
-              if (categories.size == 1) && (tags == 1)
-                # doc = Document.new(full_path, :site => site, :collection => self)
+              if categories.size == tags.size
+                money = moneys[i]
+                name = 'nil'
+                name = names[i] if i <= names.size - 1
+                new_doc = Document.new(doc.path, :site => site, :collection => posts)
+                # new_doc.excerpt_separator = doc.excerpt_separator
+                new_doc.content = doc.content
+                new_doc.data.replace(doc.data)
+                new_doc.data['title'] = money
+                new_doc.data['excerpt'] = name
+                #
+                tag_i = i
+                tag_i = 0 if (categories.size == 1) && (tags.size == 1)
                 new_doc.data['book'] = {
                   'name' => name,
                   'money' => money,
-                  'tags' => tags[0],
-                  'categories' => categories[0]
+                  'tags' => tags[tag_i],
+                  'categories' => categories[tag_i]
                 }
-                new_doc.data['tags'] = tags
-                new_doc.data['categories'] = categories
-                new_docs << new_doc
-              elsif categories.size == tags.size && tags.size == moneys.size
-                new_doc.data['book'] = {
-                  'name' => name,
-                  'money' => money,
-                  'tags' => tags[i],
-                  'categories' => categories[i]
-                }
-                new_doc.data['tags'] = [tags[i]]
-                new_doc.data['categories'] = [categories[i]]
+                new_doc.data['tags'] = [tags[tag_i]]
+                new_doc.data['categories'] = [categories[tag_i]]
                 new_docs << new_doc
               end
             end
