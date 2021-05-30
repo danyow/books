@@ -33,10 +33,6 @@ module Jekyll
           tags = Utils.pluralized_array_from_hash(book, 'tag', 'tags')
           moneys = Utils.pluralized_array_from_hash(book, 'money', 'moneys')
           names = Utils.pluralized_array_from_hash(book, 'name', 'names')
-          # Utils.parse_date(
-          #   data["date"].to_s,
-          #   "Document '#{relative_path}' does not have a valid date in the #{source}."
-          # )
           #day
           day = book['time'].strftime('%Y/%m/%d')
           month = book['time'].strftime('%Y/%m')
