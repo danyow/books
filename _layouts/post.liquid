@@ -12,22 +12,11 @@ layout: default
         <p class="post-meta">{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}{% if page.categories != empty or page.tags != empty %}{% include category_links.liquid categories=page.categories tags=page.tags date=page.date %}{% endif %}</p>
     </header>
 
-    {% if page.all %}
-        <p> {{ page.all }} </p>
-    {% endif %}
-
-    {% if page.books %}
-        <p> 有book </p>
-        {% for book in page.books %}
-            {% for name in book.names %}
-                <ul> {{ name }} </ul>
-            {% endfor %}
-            {% for money in book.moneys %}
-                <ul> {{ money }} </ul>
-            {% endfor %}
-        {% endfor %}
-    {% else %}
-        <p>无book </p>
+    {% if page.book %}
+        <ul>
+            <li> {{ page.book.name }} </li>
+            <li> {{ page.book.money }} </li>
+        </ul>
     {% endif %}
 
     <div class="post-content" itemprop="articleBody">

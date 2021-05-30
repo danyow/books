@@ -19,7 +19,7 @@
 {% if include.date != empty %} /
     {% assign day = include.date | date: "/%Y/%m/%d/" %}
     {% for archive in site.archives %}
-        {% if archive.type == "day"  and archive.url == day  %}
+        {% if archive.type == "day" and archive.url == day %}
             <a href="{{ archive.url | relative_url }}">{{ include.date | date: "%d" }}</a>
         {% endif %}
     {% endfor %}
