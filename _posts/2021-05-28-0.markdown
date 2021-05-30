@@ -1,7 +1,6 @@
 ---
 layout: post
 date:   2021-05-28 15:10:56 +0900
-permalink: /2021-05-28/
 books:
   - time: 2021-05-28 15:10:56 +0900
     categories: foods games
